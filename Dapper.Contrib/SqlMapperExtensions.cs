@@ -1334,8 +1334,7 @@ public partial class OracleAdapter : ISqlAdapter
 
         var propertyInfos = keyProperties as PropertyInfo[] ?? keyProperties.ToArray();
         var keyName = propertyInfos[0].Name;
-        var r = connection.Query($"SELECT {keyName} ID FROM {tableName} WHERE rowid = (SELECT max(rowid) from {tableName} )", transaction: transaction, commandTimeout: commandTimeout);
-
+        var r = connection.Query($"SELECT max( {keyName} ) ID FROM {tableName}", transaction: transaction, commandTimeout: commandTimeout);
         var id = r.First().ID;
         if (id == null) return 0;
         if (propertyInfos.Length == 0) return Convert.ToInt32(id);
